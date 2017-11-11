@@ -1,0 +1,11 @@
+C:\Users\Administrator\source\repos\MyBlog\MyBlog\bin\Debug\netcoreapp2.0\MyBlog.deps.json
+C:\Users\Administrator\source\repos\MyBlog\MyBlog\bin\Debug\netcoreapp2.0\MyBlog.runtimeconfig.json
+C:\Users\Administrator\source\repos\MyBlog\MyBlog\bin\Debug\netcoreapp2.0\MyBlog.runtimeconfig.dev.json
+C:\Users\Administrator\source\repos\MyBlog\MyBlog\bin\Debug\netcoreapp2.0\MyBlog.dll
+C:\Users\Administrator\source\repos\MyBlog\MyBlog\bin\Debug\netcoreapp2.0\MyBlog.pdb
+C:\Users\Administrator\source\repos\MyBlog\MyBlog\obj\Debug\netcoreapp2.0\MyBlog.csproj.CoreCompileInputs.cache
+C:\Users\Administrator\source\repos\MyBlog\MyBlog\obj\Debug\netcoreapp2.0\MyBlog.AssemblyInfoInputs.cache
+C:\Users\Administrator\source\repos\MyBlog\MyBlog\obj\Debug\netcoreapp2.0\MyBlog.AssemblyInfo.cs
+C:\Users\Administrator\source\repos\MyBlog\MyBlog\obj\Debug\netcoreapp2.0\MyBlog.dll
+C:\Users\Administrator\source\repos\MyBlog\MyBlog\obj\Debug\netcoreapp2.0\MyBlog.pdb
+C:\Users\Administrator\source\repos\MyBlog\MyBlog\obj\Debug\netcoreapp2.0\MyBlog.csprojResolveAssemblyReference.cache

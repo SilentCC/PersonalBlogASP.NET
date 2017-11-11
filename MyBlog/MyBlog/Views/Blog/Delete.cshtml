@@ -1,0 +1,63 @@
+﻿@model MyBlog.Models.mb_blog
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>mb_blog</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Blog_title)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Blog_title)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Create_time)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Create_time)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Create_id)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Create_id)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Blog_tag)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Blog_tag)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Classify)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Classify)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Content)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Content)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PageViews)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PageViews)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Blog_id" />
+        <input type="submit" value="Delete" class="btn btn-default" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>

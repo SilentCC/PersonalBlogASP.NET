@@ -1,0 +1,87 @@
+﻿@model MyBlog.Models.mb_blog
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<link rel="stylesheet" href="~/lib/kindeditor/themes/default/default.css" />
+<script charset="utf-8" src="~/lib/kindeditor/kindeditor-min.js"></script>
+<script charset="utf-8" src="~/lib/kindeditor/lang/zh_CN.js"></script>
+<h2>创建博客</h2>
+
+<hr />
+<div class="row">
+    <div class="col-md-10">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="input-group input-group-lg">
+                <span class="input-group-addon">文章标题</span>
+                <input asp-for="Blog_title" class="form-control">
+                <span asp-validation-for="Blog_title" class="text-danger"></span>
+            </div>
+
+            <br/>
+           
+
+            <!-- 以下为博客编辑器的加载块-->
+           
+            <textarea id="Content" name="Content" style="height:800px;width:100%;hidden;display: block;">KindEditor</textarea>
+
+            <script>
+                //简单模式初始化
+                var editor;
+                KindEditor.ready(function (KE) {
+                    editor = KE.create('#Content', {
+                        //允许上传图片
+                        allowImageUpload: true,
+                        //允许对上传图片进行管理
+                        allowFileManager: true,
+                        //上传图片的java代码
+                        uploadJson: '/home/KindeditorPicUpload',
+                        fileManagerJson: '/home/KindeditorPicUpload',
+                        //图片上传后，将上传内容同步到textarea中
+                        afterUpload: function () { this.sync(); },
+                        //失去焦点时，将上传内容同步到textarea中
+                        afterBlur: function () { this.sync();}
+                    });  
+                });
+            </script>
+
+            <!--编辑器加载结束-->
+            <br/>
+           
+            <div class="input-group input-group-lg">
+                <span class="input-group-addon">文章标签</span>
+                <input asp-for="Blog_tag" class="form-control" />
+                <span asp-validation-for="Blog_tag" class="text-danger"></span>
+            </div>
+            <br/>
+            <div class="input-group input-group-lg">
+                <span class="input-group-addon">文章分类</span>
+                <select asp-for="Classify" class="form-control">
+                    <option>语言程序</option>
+                    <option>人工智能</option>
+                    <option>研发管理</option>
+                    <option>Web开发</option>
+                    <option>APP开发</option>
+                </select>
+               
+                <span asp-validation-for="Classify" class="text-danger"></span>
+            </div>
+           
+            <br/>
+            <div class="form-group">
+                <input type="submit" value="发布" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

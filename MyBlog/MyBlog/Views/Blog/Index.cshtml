@@ -1,0 +1,79 @@
+﻿@model PaginatedList<MyBlog.Models.mb_blog>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>博客管理</h2>
+<p>
+    <a asp-action="Create">新建博客</a>
+</p>
+
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by name: <input type="text" name="searchString" value="@ViewData["currentFilter"]" />
+            <input type="submit" value="Search" class="btn btn-default" /> |
+            <a asp-action="Index">Back to Full List</a>
+        </p>
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a>博客标题</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["PageViewsSort"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">访问人数</a>
+            </th>
+            
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["CreateTimeSort"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">发布日期</a>
+             </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+           
+            <td>
+                @Html.DisplayFor(modelItem => item.Blog_title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PageViews)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Create_time)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Blog_id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Blog_id" asp-route-createid="@item.Create_id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Blog_id">Delete</a>
+            </td>
+            
+        </tr>
+}
+    </tbody>
+</table>
+
+@{ 
+    var pervDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+
+}
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-page="@(Model.PageIndex-1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @pervDisabled">
+    Previous
+</a>
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-page="@(Model.PageIndex + 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @nextDisabled">
+    Next
+</a>
