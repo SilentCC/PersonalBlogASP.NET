@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MyBlog.Models;
-
+using Microsoft.AspNetCore.Authorization;
 
 namespace MyBlog.Controllers
 {
@@ -20,6 +20,8 @@ namespace MyBlog.Controllers
         }
 
         // GET: mb_blog
+        //必须当前用户角色为User才可以访问  
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> Index(string sortOrder,string searchString,string currentFilter,int? page)
         {
             //博客总页面，显示的是当前用户的博客列表
@@ -82,7 +84,7 @@ namespace MyBlog.Controllers
         }
 
         // GET: mb_blog/Details/5
-        public async Task<IActionResult> Details(int? id,string createid)
+        public async Task<IActionResult> Details(int? id, string createid)
         {
             if (id == null)
             {
@@ -103,18 +105,30 @@ namespace MyBlog.Controllers
             var blog = from b in _context.mb_blog select b;
             blog = blog.Where(b => b.Create_id == createid);
 
-            blogDetails.listblog =await blog.AsNoTracking().ToListAsync();
-           
+            blogDetails.listblog = await blog.AsNoTracking().ToListAsync();
+
 
             if (mb_blog == null)
             {
                 return NotFound();
             }
 
+            //每次有用户访问了Details,都意味着这篇博客的访问数量+1
+            mb_blog.PageViews++;
+            try { 
+            _context.Update(mb_blog);
+            await _context.SaveChangesAsync();
+            }
+            catch { }
+
+
+
             return View(blogDetails);
         }
 
         // GET: mb_blog/Create
+        //必须当前用户角色为User才可以访问  
+        [Authorize(Roles = "User")]
         public IActionResult Create()
         {
             return View();
@@ -125,11 +139,15 @@ namespace MyBlog.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        //必须当前用户角色为User才可以访问  
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> Create([Bind("Blog_id,Blog_title,Create_time,Create_id,Blog_tag,Classify,Content,PageViews")] mb_blog mb_blog)
         {
             if (ModelState.IsValid)
             {
+                //博客创建者
                 mb_blog.Create_id = User.Identity.Name;
+                //博客创建时间
                 mb_blog.Create_time = DateTime.Now;
                 mb_blog.PageViews = 0;
                 _context.Add(mb_blog);
@@ -140,6 +158,8 @@ namespace MyBlog.Controllers
         }
 
         // GET: mb_blog/Edit/5
+        //必须当前用户角色为User才可以访问  
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -160,6 +180,8 @@ namespace MyBlog.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        //必须当前用户角色为User才可以访问  
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> Edit(int id, [Bind("Blog_id,Blog_title,Create_time,Create_id,Blog_tag,Classify,Content,PageViews")] mb_blog mb_blog)
         {
             if (id != mb_blog.Blog_id)
@@ -191,6 +213,8 @@ namespace MyBlog.Controllers
         }
 
         // GET: mb_blog/Delete/5
+        //必须当前用户角色为User才可以访问  
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -211,6 +235,8 @@ namespace MyBlog.Controllers
         // POST: mb_blog/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        //必须当前用户角色为User才可以访问  
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var mb_blog = await _context.mb_blog.SingleOrDefaultAsync(m => m.Blog_id == id);

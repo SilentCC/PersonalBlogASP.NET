@@ -18,10 +18,7 @@
                             @Html.Raw(Model.blog.Content)
                         </div>
                     
-                    <div>
-                        <a asp-action="Edit" asp-route-id="@Model.blog.Blog_id">Edit</a> |
-                       
-                    </div>
+                
                 </div>
                 <div class="col-md-3">
                     <br/><br/>
@@ -70,11 +67,9 @@
                             </div>
 
                             <hr>
-                            <div class="panel-body" style="text-align:left">
-                                粉丝：@Model.user.Fans_num<br /><br />
-                                博客 ： @Model.user.Blog_num
-                            </div>
+                           
                         </div>
                     </div>
+               </div>
      
 

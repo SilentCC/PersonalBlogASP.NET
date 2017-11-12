@@ -4,56 +4,81 @@
     ViewData["Title"] = "Edit";
 }
 
-<h2>Edit</h2>
+<h2>编辑博客</h2>
 
-<h4>mb_blog</h4>
 <hr />
+<link rel="stylesheet" href="~/lib/kindeditor/themes/default/default.css" />
+<script charset="utf-8" src="~/lib/kindeditor/kindeditor-min.js"></script>
+<script charset="utf-8" src="~/lib/kindeditor/lang/zh_CN.js"></script>
+
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
+    <div class="col-md-10">
+        <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Blog_id" />
-            <div class="form-group">
-                <label asp-for="Blog_title" class="control-label"></label>
-                <input asp-for="Blog_title" class="form-control" />
+
+            <div class="input-group input-group-lg">
+                <span class="input-group-addon">文章标题</span>
+                <input asp-for="Blog_title" class="form-control">
                 <span asp-validation-for="Blog_title" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Create_time" class="control-label"></label>
-                <input asp-for="Create_time" class="form-control" />
-                <span asp-validation-for="Create_time" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Create_id" class="control-label"></label>
-                <input asp-for="Create_id" class="form-control" />
-                <span asp-validation-for="Create_id" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Blog_tag" class="control-label"></label>
+
+            <br />
+
+
+            <!-- 以下为博客编辑器的加载块-->
+
+            <textarea id="Content" name="Content" style="height:800px;width:100%;hidden;display: block;">KindEditor</textarea>
+
+            <script>
+                //简单模式初始化
+                var editor;
+                KindEditor.ready(function (KE) {
+                    editor = KE.create('#Content', {
+                        //允许上传图片
+                        allowImageUpload: true,
+                        //允许对上传图片进行管理
+                        allowFileManager: true,
+                        //上传图片的java代码
+                        uploadJson: '/home/KindeditorPicUpload',
+                        fileManagerJson: '/home/KindeditorPicUpload',
+                        //图片上传后，将上传内容同步到textarea中
+                        afterUpload: function () { this.sync(); },
+                        //失去焦点时，将上传内容同步到textarea中
+                        afterBlur: function () { this.sync(); }
+                    });
+                });
+            </script>
+
+            <!--编辑器加载结束-->
+            <br />
+
+            <div class="input-group input-group-lg">
+                <span class="input-group-addon">文章标签</span>
                 <input asp-for="Blog_tag" class="form-control" />
                 <span asp-validation-for="Blog_tag" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Classify" class="control-label"></label>
-                <input asp-for="Classify" class="form-control" />
+            <br />
+            <div class="input-group input-group-lg">
+                <span class="input-group-addon">文章分类</span>
+                <select asp-for="Classify" class="form-control">
+                    <option>语言程序</option>
+                    <option>人工智能</option>
+                    <option>研发管理</option>
+                    <option>Web开发</option>
+                    <option>APP开发</option>
+                </select>
+
                 <span asp-validation-for="Classify" class="text-danger"></span>
             </div>
+
+            <br />
             <div class="form-group">
-                <label asp-for="Content" class="control-label"></label>
-                <input asp-for="Content" class="form-control" />
-                <span asp-validation-for="Content" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PageViews" class="control-label"></label>
-                <input asp-for="PageViews" class="form-control" />
-                <span asp-validation-for="PageViews" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="发布" class="btn btn-default" />
             </div>
         </form>
     </div>
 </div>
+
 
 <div>
     <a asp-action="Index">Back to List</a>

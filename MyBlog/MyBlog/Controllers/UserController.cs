@@ -48,6 +48,8 @@ namespace MyBlog.Controllers
              var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
             identity.AddClaim(new Claim(ClaimTypes.Name, User_id));
 
+            identity.AddClaim(new Claim(ClaimTypes.Role, "User"));
+            //用户签到
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
           
            
@@ -99,9 +101,19 @@ namespace MyBlog.Controllers
             {
                 _context.Add(mb_user);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+                //用户标识
+                var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
+                identity.AddClaim(new Claim(ClaimTypes.Name, mb_user.User_id));
+
+                identity.AddClaim(new Claim(ClaimTypes.Role, "User"));
+                //用户签到
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
+
+                return RedirectToAction("Index", "Home");
             }
             return View(mb_user);
+           
         }
 
         // GET: User/Edit/5

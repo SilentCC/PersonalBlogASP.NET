@@ -11,7 +11,8 @@ namespace MyBlog.Models
         [Key]
         public string ID { get; set; }
         //用户id， 主键
-     
+        [StringLength(60,MinimumLength =3)]
+        [Required]
         public string User_id { get; set; }
         //用户姓名
         public string User_name { get; set; }
@@ -22,6 +23,8 @@ namespace MyBlog.Models
         //评论条数
         public int Comment_num { get; set; }
         //用户密码
+        [StringLength(60, MinimumLength = 3)]
+        [Required]
         public string User_pwd { get; set; }
 
 
