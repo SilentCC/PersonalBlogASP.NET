@@ -21,5 +21,13 @@ namespace MyBlog.Models
        
 
         public DbSet<MyBlog.Models.mb_user> mb_user { get; set; }
+
+       
+
+        public DbSet<MyBlog.Models.mb_relationship> mb_relationship { get; set; }
+
+       
+
+        public DbSet<MyBlog.Models.mb_comment> mb_comment { get; set; }
     }
 }

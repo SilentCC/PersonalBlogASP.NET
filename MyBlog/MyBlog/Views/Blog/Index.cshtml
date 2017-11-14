@@ -4,76 +4,155 @@
     ViewData["Title"] = "Index";
 }
 
-<h2>博客管理</h2>
-<p>
-    <a asp-action="Create">新建博客</a>
-</p>
 
-<form asp-action="Index" method="get">
-    <div class="form-actions no-color">
-        <p>
-            Find by name: <input type="text" name="searchString" value="@ViewData["currentFilter"]" />
-            <input type="submit" value="Search" class="btn btn-default" /> |
-            <a asp-action="Index">Back to Full List</a>
-        </p>
+<h2>个人主页</h2>
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-2">
+                <img src="@ViewData["avatar"]" alt="image with rounded corners" style="width
+    :120px;height:120px; vertical-align: middle;">
+                <br />
+                <br />
+                <button class="btn btn-primary" onclick="fun()">上传新头像</button>
+
+                <form method="post" enctype="multipart/form-data" asp-controller="User" asp-action="Uploadavatar" id="form1" style="display:none">
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            <input type="file" name="files" multiple />
+                        </div>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            <input type="submit" value="Upload" class="btn btn-primary" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-4">
+                <h3>
+                    @User.Identity.Name
+                </h3>
+                <hr />
+                粉丝：@ViewData["fans_num"]<br /><br />
+                博客：@ViewData["blog_num"]
+            </div>
+        </div>
     </div>
-</form>
+</div>
+<script type="text/javascript">
+    function fun() {
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                <a>博客标题</a>
-            </th>
-            <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["PageViewsSort"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">访问人数</a>
-            </th>
-            
-            <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["CreateTimeSort"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">发布日期</a>
-             </th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-           
-            <td>
-                @Html.DisplayFor(modelItem => item.Blog_title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PageViews)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Create_time)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Blog_id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Blog_id" asp-route-createid="@item.Create_id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Blog_id">Delete</a>
-            </td>
-            
-        </tr>
-}
-    </tbody>
-</table>
+        $("#form1").css("display", "block");
 
-@{ 
-    var pervDisabled = !Model.HasPreviousPage ? "disabled" : "";
-    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+    }
+</script>
 
-}
-<a asp-action="Index"
-   asp-route-sortOrder="@ViewData["CurrentSort"]"
-   asp-route-page="@(Model.PageIndex-1)"
-   asp-route-currentFilter="@ViewData["CurrentFilter"]"
-   class="btn btn-default @pervDisabled">
-    Previous
-</a>
-<a asp-action="Index"
-   asp-route-sortOrder="@ViewData["CurrentSort"]"
-   asp-route-page="@(Model.PageIndex + 1)"
-   asp-route-currentFilter="@ViewData["CurrentFilter"]"
-   class="btn btn-default @nextDisabled">
-    Next
-</a>
+
+
+<div class="tabbable">
+    <!-- Only required for left/right tabs -->
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab1" data-toggle="tab">我的博客</a></li>
+        <li><a href="#tab2" data-toggle="tab">我的关系</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="tab1">
+            <br />
+            <p>
+                <a asp-action="Create">新建博客</a>
+            </p>
+            <form asp-action="Index" method="get">
+                <div class="form-actions no-color">
+                    <p>
+                        搜索博客: <input type="text" name="searchString" value="@ViewData["currentFilter"]" />
+                        <input type="submit" value="Search" class="btn btn-default" /> |
+                        <a asp-action="Index">Back to Full List</a>
+                    </p>
+                </div>
+            </form>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            <a>博客标题</a>
+                        </th>
+                        <th>
+                            <a asp-action="Index" asp-route-sortOrder="@ViewData["PageViewsSort"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">访问人数</a>
+                        </th>
+
+                        <th>
+                            <a asp-action="Index" asp-route-sortOrder="@ViewData["CreateTimeSort"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">发布日期</a>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+            {
+                        <tr>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Blog_title)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PageViews)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Create_time)
+                            </td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.Blog_id">Edit</a> |
+                                <a asp-action="Details" asp-route-id="@item.Blog_id" asp-route-createid="@item.Create_id">Details</a> |
+                                <a asp-action="Delete" asp-route-id="@item.Blog_id">Delete</a>
+                            </td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            @{
+                var pervDisabled = !Model.HasPreviousPage ? "disabled" : "";
+                var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+
+            }
+            <a asp-action="Index"
+               asp-route-sortOrder="@ViewData["CurrentSort"]"
+               asp-route-page="@(Model.PageIndex-1)"
+               asp-route-currentFilter="@ViewData["CurrentFilter"]"
+               class="btn btn-default @pervDisabled">
+                Previous
+            </a>
+            <a asp-action="Index"
+               asp-route-sortOrder="@ViewData["CurrentSort"]"
+               asp-route-page="@(Model.PageIndex + 1)"
+               asp-route-currentFilter="@ViewData["CurrentFilter"]"
+               class="btn btn-default @nextDisabled">
+                Next
+            </a>
+        </div>
+
+        <div class="tab-pane fade" id="tab2">
+            <br />
+            <div class="row">
+                @foreach (var item in ViewBag.DV)
+            {
+                    <div class="col-md-1">
+                        <img src="@item.Avatar" alt="image with rounded corners" style="width
+    :60px;height:60px; vertical-align: middle;">
+                        <h4>@item.User_id</h4>
+                    </div>
+
+                }
+                <div>
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

@@ -77,6 +77,31 @@ namespace MyBlog.Controllers
 
             }
 
+            //用ViewData 传递，当前用户的粉丝数量和博客数量,以及头像路径
+            var mb_user =await _context.mb_user.SingleOrDefaultAsync(m => m.User_id == User.Identity.Name);
+            ViewData["blog_num"] = mb_user.Blog_num;
+            ViewData["fans_num"] = mb_user.Fans_num;
+            ViewData["avatar"] = mb_user.Avatar;
+
+
+
+            //将当前用户的所有粉丝列出来
+
+           
+            var realation = from b in _context.mb_relationship  select b;
+            realation = realation.Where(m => m.UserB_id == User.Identity.Name);
+
+            List<mb_relationship> listrelation = await realation.AsNoTracking().ToListAsync();
+
+            List<mb_user> listfans = new List<mb_user>();
+            
+            foreach (mb_relationship item in listrelation)
+            {
+                listfans.Add(await _context.mb_user.SingleOrDefaultAsync(m => m.User_id == item.UserA_id));
+
+            }
+            ViewBag.DV = listfans;
+
             int pageSize = 3;
             //将博客查询转换为支持分页的集合类型中的博客单页
             return View(await PaginatedList<mb_blog>.CreateAsync(mb_blog.AsNoTracking()
@@ -121,9 +146,52 @@ namespace MyBlog.Controllers
             }
             catch { }
 
+            //当当前用户和博客创建者已经是订阅关系了
+            var mb_relation = _context.mb_relationship.SingleOrDefaultAsync(m => m.UserA_id == User.Identity.Name && m.UserB_id == mb_blog.Create_id);
+            if(mb_relation.Result!=null)
+            {
+                ViewData["IsRelation"] = "true";
+            }
 
+            //获取所有该博客的评论
+            var comment = from b in _context.mb_comment select b;
+            comment = comment.Where(m => m.blog_id == id&&m.comment_id==0);
+            
+            List<mb_comment> mb_comment = await comment.AsNoTracking().ToListAsync();
+            List<CommentDetails> allcomment = new List<CommentDetails>();
 
+            foreach(var item in mb_comment)
+            {
+                mb_user user = await _context.mb_user.SingleOrDefaultAsync(m => m.User_id == item.User_publish);
+                allcomment.Add(new CommentDetails(item,user));
+            }
+            foreach(var item in allcomment)
+            {
+                await dfs(item);
+            }
+            
+            ViewBag.CO = allcomment;
+           
             return View(blogDetails);
+        }
+        //利用深度优先搜索，将数据库中相应的搜索查询出来并封装
+        public async Task dfs( CommentDetails comment)
+        {
+            //查询所有当前评论的子评论
+            var comment2 = from b in _context.mb_comment select b;
+            comment2 = comment2.Where(m => m.comment_id == comment.comment.ID);
+            List<mb_comment> mb_comment = await comment2.AsNoTracking().ToListAsync();
+
+            foreach(var item in mb_comment)
+            {
+                mb_user user =await _context.mb_user.SingleOrDefaultAsync(b => b.User_id == item.User_publish);
+                CommentDetails m = new CommentDetails(item,user);
+                comment.listnum++;
+                comment.listson.Add(m);
+                await dfs(comment.listson[comment.listnum-1]);
+            }
+
+
         }
 
         // GET: mb_blog/Create
@@ -151,6 +219,17 @@ namespace MyBlog.Controllers
                 mb_blog.Create_time = DateTime.Now;
                 mb_blog.PageViews = 0;
                 _context.Add(mb_blog);
+
+                //每创建一个博客，博客数加1
+                var mb_user = await _context.mb_user.SingleOrDefaultAsync(m => m.User_id == mb_blog.Create_id);
+                mb_user.Blog_num++;
+                try
+                {
+                    _context.Update(mb_user);
+                    await _context.SaveChangesAsync();
+                }
+                catch { }
+
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -259,6 +338,27 @@ namespace MyBlog.Controllers
             //详情页的文章推荐
             public List<mb_blog> listblog { get; set; }
 
+        }
+
+        //新建一个类，用来封装评论
+        public class CommentDetails
+        {
+            //评论者
+            public mb_user user;
+            //评论内容
+            public mb_comment comment { get; set; }
+            //子评论的个数
+            public int listnum { get; set; }
+            //子评论的内容
+            public List<CommentDetails> listson { get; set; }
+
+            public CommentDetails(mb_comment comment,mb_user user)
+            {
+                this.user = user;
+                this.listson = new List<CommentDetails>();
+                this.comment = comment;
+            }
+            
         }
 
     }

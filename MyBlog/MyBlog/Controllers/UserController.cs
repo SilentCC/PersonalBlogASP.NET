@@ -10,6 +10,10 @@ using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
+using System.Net.Http.Headers;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
+using Microsoft.AspNetCore.Hosting.Server;
 
 namespace MyBlog.Controllers
 {
@@ -17,9 +21,12 @@ namespace MyBlog.Controllers
     {
         private readonly MyBlogContext _context;
 
-        public UserController(MyBlogContext context)
+        private IHostingEnvironment hostingEnv;
+
+        public UserController(MyBlogContext context, IHostingEnvironment env)
         {
             _context = context;
+            this.hostingEnv = env;
         }
 
         // GET: User
@@ -95,10 +102,11 @@ namespace MyBlog.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,User_id,User_name,Fans_num,Blog_num,Comment_num,User_pwd")] mb_user mb_user)
+        public async Task<IActionResult> Create([Bind("ID,User_id,User_name,Fans_num,Blog_num,Comment_num,User_pwd,Avatar")] mb_user mb_user)
         {
             if (ModelState.IsValid)
             {
+                mb_user.Avatar = "../../userhead/1.png";
                 _context.Add(mb_user);
                 await _context.SaveChangesAsync();
 
@@ -137,7 +145,7 @@ namespace MyBlog.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("User_id,User_name,Fans_num,Blog_num,Comment_num,User_pwd")] mb_user mb_user)
+        public async Task<IActionResult> Edit(string id, [Bind("User_id,User_name,Fans_num,Blog_num,Comment_num,User_pwd,Avatar")] mb_user mb_user)
         {
             if (id != mb_user.User_id)
             {
@@ -200,5 +208,54 @@ namespace MyBlog.Controllers
         {
             return _context.mb_user.Any(e => e.User_id == id);
         }
+       //上传头像函数
+        public async Task<IActionResult> Uploadavatar(List<IFormFile> files)
+        {
+            string tempname = "";
+
+            foreach (var file in files)
+            {
+                var filename = ContentDispositionHeaderValue
+                                .Parse(file.ContentDisposition)
+                                .FileName.ToString()
+                                .Trim('"');
+                //图片后缀名
+                var extname = filename.Substring(filename.LastIndexOf("."), filename.Length - filename.LastIndexOf("."));
+                //图片重新命名
+                var filename1 = System.Guid.NewGuid().ToString() + extname;
+
+                tempname = filename1;
+                //获取当前项目的路径
+                var path = hostingEnv.WebRootPath;
+                //完整的图片储存路径
+                filename = hostingEnv.WebRootPath + $@"\userhead\{filename1}";
+
+                //当前用户的头像路径更改
+                var mb_user = await _context.mb_user.SingleOrDefaultAsync(m => m.User_id == User.Identity.Name);
+
+                mb_user.Avatar = $@"../../userhead/" + tempname; ;
+                try
+                {
+                    _context.Update(mb_user);
+                    await _context.SaveChangesAsync();
+                }
+                catch { }
+                //用户头像储存到ViewData
+                ViewData["avatar"] = mb_user.Avatar;
+
+                //在wwwroot的upload文件夹下，写入图片
+                using (FileStream fs = System.IO.File.Create(filename))
+                {
+                    // 复制文件
+                    file.CopyTo(fs);
+                    //清楚缓冲区数据
+                    fs.Flush();
+
+                }
+            }
+
+            return RedirectToAction("Index", "Blog");
+        }
+        
     }
 }

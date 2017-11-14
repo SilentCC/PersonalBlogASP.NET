@@ -20,4 +20,69 @@
     <Folder Include="wwwroot\upload\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\images\face\0.gif" />
+    <None Include="wwwroot\images\face\1.gif" />
+    <None Include="wwwroot\images\face\10.gif" />
+    <None Include="wwwroot\images\face\11.gif" />
+    <None Include="wwwroot\images\face\12.gif" />
+    <None Include="wwwroot\images\face\13.gif" />
+    <None Include="wwwroot\images\face\14.gif" />
+    <None Include="wwwroot\images\face\15.gif" />
+    <None Include="wwwroot\images\face\16.gif" />
+    <None Include="wwwroot\images\face\17.gif" />
+    <None Include="wwwroot\images\face\18.gif" />
+    <None Include="wwwroot\images\face\19.gif" />
+    <None Include="wwwroot\images\face\2.gif" />
+    <None Include="wwwroot\images\face\20.gif" />
+    <None Include="wwwroot\images\face\21.gif" />
+    <None Include="wwwroot\images\face\22.gif" />
+    <None Include="wwwroot\images\face\23.gif" />
+    <None Include="wwwroot\images\face\24.gif" />
+    <None Include="wwwroot\images\face\25.gif" />
+    <None Include="wwwroot\images\face\26.gif" />
+    <None Include="wwwroot\images\face\27.gif" />
+    <None Include="wwwroot\images\face\28.gif" />
+    <None Include="wwwroot\images\face\29.gif" />
+    <None Include="wwwroot\images\face\3.gif" />
+    <None Include="wwwroot\images\face\30.gif" />
+    <None Include="wwwroot\images\face\31.gif" />
+    <None Include="wwwroot\images\face\32.gif" />
+    <None Include="wwwroot\images\face\33.gif" />
+    <None Include="wwwroot\images\face\34.gif" />
+    <None Include="wwwroot\images\face\35.gif" />
+    <None Include="wwwroot\images\face\36.gif" />
+    <None Include="wwwroot\images\face\37.gif" />
+    <None Include="wwwroot\images\face\38.gif" />
+    <None Include="wwwroot\images\face\39.gif" />
+    <None Include="wwwroot\images\face\4.gif" />
+    <None Include="wwwroot\images\face\40.gif" />
+    <None Include="wwwroot\images\face\41.gif" />
+    <None Include="wwwroot\images\face\42.gif" />
+    <None Include="wwwroot\images\face\43.gif" />
+    <None Include="wwwroot\images\face\44.gif" />
+    <None Include="wwwroot\images\face\45.gif" />
+    <None Include="wwwroot\images\face\46.gif" />
+    <None Include="wwwroot\images\face\47.gif" />
+    <None Include="wwwroot\images\face\48.gif" />
+    <None Include="wwwroot\images\face\49.gif" />
+    <None Include="wwwroot\images\face\5.gif" />
+    <None Include="wwwroot\images\face\50.gif" />
+    <None Include="wwwroot\images\face\51.gif" />
+    <None Include="wwwroot\images\face\52.gif" />
+    <None Include="wwwroot\images\face\53.gif" />
+    <None Include="wwwroot\images\face\54.gif" />
+    <None Include="wwwroot\images\face\55.gif" />
+    <None Include="wwwroot\images\face\56.gif" />
+    <None Include="wwwroot\images\face\57.gif" />
+    <None Include="wwwroot\images\face\58.gif" />
+    <None Include="wwwroot\images\face\59.gif" />
+    <None Include="wwwroot\images\face\6.gif" />
+    <None Include="wwwroot\images\face\7.gif" />
+    <None Include="wwwroot\images\face\78.gif" />
+    <None Include="wwwroot\images\face\8.gif" />
+    <None Include="wwwroot\images\face\81.gif" />
+    <None Include="wwwroot\images\face\9.gif" />
+  </ItemGroup>
+
 </Project>

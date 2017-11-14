@@ -49,10 +49,48 @@ namespace MyBlog.Migrations
                     b.ToTable("mb_blog");
                 });
 
+            modelBuilder.Entity("MyBlog.Models.mb_comment", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("Create_time");
+
+                    b.Property<string>("User_accept");
+
+                    b.Property<string>("User_publish");
+
+                    b.Property<int>("blog_id");
+
+                    b.Property<int>("comment_id");
+
+                    b.Property<string>("content");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("mb_comment");
+                });
+
+            modelBuilder.Entity("MyBlog.Models.mb_relationship", b =>
+                {
+                    b.Property<string>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("UserA_id");
+
+                    b.Property<string>("UserB_id");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("mb_relationship");
+                });
+
             modelBuilder.Entity("MyBlog.Models.mb_user", b =>
                 {
                     b.Property<string>("ID")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Avatar");
 
                     b.Property<int>("Blog_num");
 

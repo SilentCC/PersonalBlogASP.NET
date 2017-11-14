@@ -26,6 +26,8 @@ namespace MyBlog.Models
         [StringLength(60, MinimumLength = 3)]
         [Required]
         public string User_pwd { get; set; }
+        //用户头像路径
+        public string Avatar { get; set; }
 
 
     }
